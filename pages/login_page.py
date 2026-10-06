@@ -1,4 +1,4 @@
-from playwright.sync_api import Page
+from playwright.sync_api import Locator, Page
 
 
 class LoginPage:
@@ -9,7 +9,6 @@ class LoginPage:
         self.username_input = page.get_by_placeholder("Username")
         self.password_input = page.get_by_placeholder("Password")
         self.login_button = page.get_by_role("button", name="Login")
-        self.login_error = page.get_by_text("Username and password do not match")
 
     def open(self):
         self.page.goto(self.URL)
@@ -18,3 +17,7 @@ class LoginPage:
         self.username_input.fill(username)
         self.password_input.fill(password)
         self.login_button.click()
+
+    def error_with_text(self, text: str) -> Locator:
+        """指定した文言を含むエラー表示を返す"""
+        return self.page.get_by_text(text)
