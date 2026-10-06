@@ -7,7 +7,7 @@ def test_register_user_is_saved_in_db(register_page, db):
     register_page.open()
     register_page.register("taro", "taro@example.com")
 
-    expect(register_page.message).to_have_text("登録しました")
+    expect(register_page.message).to_have_text("登録完了しました")
     user = db.fetch_one(
         "SELECT username, email, status FROM users WHERE username = ?",
         ("taro",),
