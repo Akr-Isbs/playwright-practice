@@ -17,3 +17,15 @@ def inventory_page(page: Page) -> InventoryPage:
     login.open()
     login.login("standard_user", "secret_sauce")
     return InventoryPage(page)
+
+
+from db import database
+
+
+@pytest.fixture
+def db():
+    """テストごとに、空のusersテーブルを用意し、終わったら片付ける"""
+    database.init_db()
+    database.execute("DELETE FROM users")
+    yield database
+    database.execute("DELETE FROM users")
