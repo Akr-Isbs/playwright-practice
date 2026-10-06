@@ -1,0 +1,36 @@
+name: Playwright tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: コードを取得する
+        uses: actions/checkout@v6
+
+      - name: Pythonを用意する
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+          cache: pip
+
+      - name: ライブラリをインストールする
+        run: pip install -r requirements.txt
+
+      - name: ブラウザをインストールする
+        run: playwright install --with-deps chromium
+
+      - name: テストを実行する
+        run: pytest -v --screenshot only-on-failure
+
+      - name: 失敗時のスクリーンショットを保存する
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: test-results
+          path: test-results/
